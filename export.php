@@ -48,7 +48,7 @@ $datamahasiswa = query("SELECT * FROM datamahasiswa");
 
                 <tbody>
                     <?php $i = 1; ?>
-                    <?php foreach ($daftarmahasiswa as $row) : ?>
+                    <?php foreach ($datamahasiswa as $row) : ?>
                         <tr>
 
                             <td><?= $i; ?></td>
