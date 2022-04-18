@@ -1,6 +1,6 @@
 <?php
 
-require 'fuctions.php';
+require 'functions.php';
 
 if(isset($_POST["registrasi"])) {
     
