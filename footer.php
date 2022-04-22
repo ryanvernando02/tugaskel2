@@ -1,7 +1,7 @@
 <footer class="main-footer">
         <div class="pull-right hidden-xs">
         </div>
-        <strong>Copyright &copy; 2022 <a href="#">Universitas Baturaja </a>.</strong> 
+        <strong>Copyright &copy; 2022 <a href="#">Kelas B.2.1 Universitas Baturaja </a>.</strong> 
       </footer>
     </div><!-- ./wrapper -->
 

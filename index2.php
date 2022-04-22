@@ -95,7 +95,7 @@ if ( isset($_POST["cari"]) ) {
     <!-- Fitur cari -->
     <div class="container">
         <form class="d-flex" action="" method="post">
-            <input class="form-control me-1 input-sm" style="width: 280px;" type="text" name="keyword" placeholder="Masukkan bae.." autocomplete="off">
+            <input class="form-control me-1 input-sm" style="width: 280px;" type="text" name="keyword" placeholder="Penelusuran..." autocomplete="off">
             <button class="btn btn-info" type="submit" name="cari"><i class="fa fa-search"></i></button>
         </form>
     </div>
@@ -138,6 +138,7 @@ if ( isset($_POST["cari"]) ) {
                     <th class="teks">NPM</th>
                     <th class="teks">Jurusan</th>
                     <th class="teks">E-mail</th>
+                    <th class="teks">Status</th>
                     <th class="teks" colspan="2">Aksi</th>
                 </tr>
             </thead>
@@ -152,6 +153,7 @@ if ( isset($_POST["cari"]) ) {
                         <td class="teks"><?= $mhs["npm"]; ?></td>
                         <td class="teks"><?= $mhs["jurusan"]; ?></td>
                         <td class="teks"><?= $mhs["email"]; ?></td>
+                        <td class="teks"><?= $mhs["status"]; ?></td>
                         <td class="teks">
                             <a href="ubah.php?id=<?= $mhs["id"]; ?>"><i class="fa fa-edit fa-lg" style="color: #009933;"></i></a>
                         </td>

@@ -43,12 +43,13 @@ $datamahasiswa = query("SELECT * FROM datamahasiswa");
                         <th>NPM</th>
                         <th>Jurusan</th>
                         <th>Email</th>
+                        <th>Status</th>
                     </tr>
                 </thead>
 
                 <tbody>
                     <?php $i = 1; ?>
-                    <?php foreach ($daftarmahasiswa as $row) : ?>
+                    <?php foreach ($datamahasiswa as $row) : ?>
                         <tr>
 
                             <td><?= $i; ?></td>
@@ -57,6 +58,7 @@ $datamahasiswa = query("SELECT * FROM datamahasiswa");
                             <td><?php echo $row["npm"] ?></td>
                             <td><?php echo $row["jurusan"] ?></td>
                             <td><?php echo $row["email"] ?></td>
+                            <td><?php echo $row["status"] ?></td>
                         </tr>
                         <?php $i++; ?>
                     <?php endforeach; ?>

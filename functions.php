@@ -63,6 +63,7 @@ function tambah($data) {
     $npm = htmlspecialchars($data["npm"]);
     $jurusan = htmlspecialchars($data["jurusan"]);
     $email = htmlspecialchars($data["email"]);
+    $status = htmlspecialchars($data["status"]);
 
     //upload foto
     $foto = upload();
@@ -70,7 +71,7 @@ function tambah($data) {
         return false;
     }
 
-    $query = "INSERT INTO datamahasiswa VALUES ('', '$nama', '$npm', '$jurusan', '$email', '$foto')";
+    $query = "INSERT INTO datamahasiswa VALUES ('', '$nama', '$npm', '$jurusan', '$email', '$foto', '$status')";
     mysqli_query($conn, $query);
 
     return mysqli_affected_rows($conn);
@@ -96,6 +97,7 @@ function ubah($data) {
     $jurusan = htmlspecialchars($data["jurusan"]);
     $email = htmlspecialchars($data["email"]);
     $fotoLama = $data["fotolama"];
+    $status = htmlspecialchars($data["status"]);
 
     // cek apakah user mengganti foto baru atau tidak
     if($_FILES['foto']['error'] === 4) {
@@ -104,7 +106,7 @@ function ubah($data) {
         $foto = upload();
     }
 
-    $query = "UPDATE datamahasiswa SET nama='$nama', npm='$npm', jurusan='$jurusan', email='$email', foto='$foto' WHERE id=$id";
+    $query = "UPDATE datamahasiswa SET nama='$nama', npm='$npm', jurusan='$jurusan', email='$email', foto='$foto', status='$status' WHERE id=$id";
     mysqli_query($conn, $query);
 
     return mysqli_affected_rows($conn);
@@ -112,7 +114,7 @@ function ubah($data) {
 
 // function cari
 function cari($keyword) {
-    $query = "SELECT * FROM datamahasiswa WHERE nama LIKE '%$keyword%' OR npm LIKE '%$keyword%' OR jurusan LIKE '%$keyword%' OR email LIKE '%$keyword%'";
+    $query = "SELECT * FROM datamahasiswa WHERE nama LIKE '%$keyword%' OR npm LIKE '%$keyword%' OR jurusan LIKE '%$keyword%' OR email LIKE '%$keyword%' OR status LIKE '%$keyword%'";
     return query($query);
 }
 

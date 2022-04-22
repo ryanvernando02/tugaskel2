@@ -74,9 +74,13 @@ if(isset($_POST["tambah"])) {
             <label class ="teks2" for="email">E-mail:</label>
             <input class="form-control" type="text" name="email" id="email" autocomplete="off" required>
         </div>
-        <div class="mb-3 mt-3">
+                <div class="mb-3 mt-3">
             <label class ="teks2" for="foto">Foto:</label>
             <input class="form-control" type="file" name="foto" id="foto">
+        </div>
+        <div class="mb-3 mt-3">
+            <label class ="teks2" for="status">Status: 0 (NOL) Jika Tidak Aktif , 1 (SATU) Jika Aktif</label>
+            <input class="form-control" type="text" name="status" id="status" autocomplete="off" required>
         </div>
         <div class="mb-3 mt-3">
             <button class="btn btn-success" type="submit" name="tambah">Selesai <span class="glyphicon glyphicon-ok"></span></button>

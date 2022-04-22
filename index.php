@@ -1,143 +1,101 @@
 <?php
-
-session_start();
-
-require 'functions.php';
-
-// cek cookie
-if( isset($_COOKIE["lock"]) && isset($_COOKIE["key"]) ) {
-    $lock = $_COOKIE['lock'];
-    $key = $_COOKIE['key'];
-
-    // ambil username berdasarkan id
-    $hasil = mysqli_query($conn, "SELECT username FROM user WHERE id=$id");
-    $row = mysqli_fetch_assoc($hasil);
-
-    // cek cookie dan username 
-    if($key === hash('sha100', $row['username'])) {
-        $_SESSION['login'] = true;
-    }
-}
-
-
-
-
-if(isset($_POST["login"])) {
-
-$username = $_POST["username"];
-$password = $_POST["password"];
-
-$hasil = mysqli_query( $conn, "SELECT * FROM user WHERE username='$username' " );
-
-// cek username
-if( mysqli_num_rows($hasil) === 1 ) {
-
-    // cek password
-    $row = mysqli_fetch_assoc($hasil) ;
-    if(password_verify($password, $row["password"])) {
-
-        // set session
-        $_SESSION["login"] = true;
-
-        // cek remember me
-        if( isset($_POST["remember"]) ) {
-            // buat cookie
-            setcookie('lock', $row['id'], time() + 40);
-            setcookie('key', hash('sha100', $row['username']), time() + 40);
-        }
-
-        header("Location: index2.php");
-        exit;
-    }
-}
-$error = true;
-}
+include "database.php";
+$que = mysqli_query($db_conn, "SELECT * FROM un_konfigurasi");
+$hsl = mysqli_fetch_array($que);
+$timestamp = strtotime($hsl['tgl_pengumuman']);
+// menghapus tags html (mencegah serangan jso pada halaman index)
+$instansi = strip_tags($hsl['instansi']);
+$tahun = strip_tags($hsl['tahun']);
+$tgl_pengumuman = strip_tags($hsl['tgl_pengumuman']);
+//echo $timestamp;
 
 ?>
-
+<!DOCTYPE html>
 <html>
-    <head>
+<head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>System Login</title>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-144808195-1"></script>
-	<script>
-	  window.dataLayer = window.dataLayer || [];
-	  function gtag(){dataLayer.push(arguments);}
-	  gtag('js', new Date());
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="Description" content="Aplikasi Pengecekan Data Mahasiswa UNBARA">
+	<title>Info Data Mahasiswa UNBARA</title>
+	<link rel="shortcut icon" href="img/favicon.png">
+	<!--<link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">-->
+	<link rel="stylesheet" href="css/main.css">
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/jasny-bootstrap.min.css" rel="stylesheet">
+	
+</head>
 
-	  gtag('config', 'UA-144808195-1');
-	</script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-	<style>body{background-image:url("img/bg.jpg");}
-	@media screen and (max-width: 600px) {
-h4{font-size:85%;}
-}
-	</style>
-	<link rel="icon" 
-      type="image/png" 
-      href="favicon.png">
-    </head>
-    <body>
-    <div align="center">
-    <img src="img/unbara.png" width="10%" style="margin-top:5%" \>
-            <div align="center" style="width:750px;margin-top:5%;">
-                <form name="login_form" method="post" class="well well-lg" action="" style="-webkit-box-shadow: 0px 0px 20px #ff00000;">
-                    <i class="fa fa-windows fa-4x"></i>
-                    <div class="container">
-					<div style="color:white">
-                    <h4>DATABASE MAHASISWA</h4>
-                    <br>
-                    <?php if(isset($error)) : ?>
-        <div class="alert alert-danger">
-            <strong>Log In Gagal!</strong> Username atau Password Salah.
-        </div>
-    <?php endif; ?>
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="" aria-hidden="true"></i></span>
-                        <input require name="username" id="username" class="form-control" type="text" placeholder="username" autocomplete="off" />
-                    </div>
-                    <br/>
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="" aria-hidden="true"></i></span>
-                        <input require name="password" id="password" class="form-control" type="password" placeholder="password" autocomplete="off" />
-                    </div>
-                    <br />
-
-            <div class="mb-1 mt-1">
-            <button class="btn btn-primary" type="submit" name="login">Login</button>
-            <a href="registrasi.php">
-                <button type="button" class="btn btn-success">Buat Akun Baru</button>
-            </a>
+<body>
+        <div class="flex-center position-ref full-height">
+		<div class="content">
+			<img src="img/unbara.png" alt="Logo PDAM TIRTARAJA" width="100px" height="100px;">
+			<div class="title m-b-md">
+				Info Data Mahasiswa UNBARA
+			</div>
+    
+    <div class="container">
+		<!-- countdown -->
+		
+		<hr>
+		<div id="clock" class="lead"></div>
+		
+		<div id="xpengumuman">
+		<?php
+		if(isset($_POST['submit'])){
+			//tampilkan hasil queri jika ada
+			$npm = stripslashes($_POST['nomor']);
+			
+			$hasil = mysqli_query($db_conn,"SELECT * FROM datamahasiswa WHERE npm='$npm'");
+			if(mysqli_num_rows($hasil) > 0){
+				$data = mysqli_fetch_array($hasil);
+				
+		?>
+		    
+			<table class="table table-bordered">
+				<tr><td>Foto</td><td class="teks"><img src="img/<?= $data['foto']; ?>" class="img-thumbnail" alt="Foto Mahasiswa" width="80"></td>
+				<tr><td>NPM</td><td><?= htmlspecialchars($data['npm']); ?></td></tr>
+				<tr><td>Nama Mahasiswa</td><td><?= htmlspecialchars($data['nama']); ?></td></tr>
+				<tr><td>Jurusan</td><td><?= htmlspecialchars($data['jurusan']); ?></td></tr>
+			</table>
+						
+			<?php
+			if( $data['status'] == 1 ){
+				echo '<div class="alert alert-success" role="alert"><strong>SELAMAT !</strong> Status Mahasiswa Aktif</div>';
+			} else {
+				echo '<div class="alert alert-danger" role="alert"><strong>MAAF !</strong> Status Mahasiswa Tidak Aktif!</div>';
+			}	
+			?>
+			
+		<?php
+			} else {
+				echo 'nomor NPM yang anda inputkan tidak ditemukan! periksa kembali nomor NPM anda.';
+				//tampilkan pop-up dan kembali tampilkan form
+			}
+		} else {
+			//tampilkan form input nomor npm
+		?>
+              
+        <form method="post">
+            <div class="input-group">
+                <input type="text" name="nomor" class="form-control" placeholder="Masukkan Nomor NPM" required>
+                <span class="input-group-btn">
+                    <button class="btn btn-primary" type="submit" name="submit">Periksa!</button>
+                </span>
             </div>
-                </form>
-            </div>
-        </div>
-        <br>
-
-        <footer align="center">
-        <div class="container">
-					<div style="color:white">Created By </div><a href="#" title="Universitas Baturaja"><i class="fa fa-copyright" aria-hidden="true">Universitas Baturaja</i></a>
-        </footer>
-    </body>
-
-    <!--<script type="text/javascript">
-    function validasi() {
-        var username = document.getElementById("username").value;
-        var password = document.getElementById("password").value;       
-        if (username != "" && password!="") {
-            return true;
-        }else{
-            alert('Username dan Password harus di isi !');
-            return false;
-        }
-    }
-    </script>-->
-
+        </form>
+		<?php
+		}
+		?>
+		</div>
+    </div><!-- /.container -->
+	<footer class="footer">
+		<div class="container">
+			<p class="text-muted">&copy; <?= $tahun; ?> &middot; <?= $instansi; ?></p>
+		</div>
+	</footer> 
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="js/jquery.ripples-min.js"></script>
+	<script src="js/ripple.js"></script>
+</body>
 </html>

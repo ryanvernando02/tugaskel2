@@ -84,6 +84,10 @@ if(isset($_POST["edit"])) {
             <input class="form-control" type="text" name="email" id="email" value="<?= $mahasiswa2['email']; ?>" required>
         </div>
         <div class="mb-3 mt-3">
+            <label class ="teks2" for="status">Status: 0 (NOL) Jika Tidak Aktif , 1 (SATU) Jika Aktif</label>
+            <input class="form-control" type="text" name="status" id="status" value="<?= $mahasiswa2['status']; ?>" required>
+        </div>
+        <div class="mb-3 mt-3">
             <button class="btn btn-success" type="submit" name="edit">Ubah <span class="glyphicon glyphicon-ok"></span></button>
             <a href="index2.php">
                 <button class="btn btn-danger" type="button">Batal <span class="glyphicon glyphicon-remove"></span></button>
